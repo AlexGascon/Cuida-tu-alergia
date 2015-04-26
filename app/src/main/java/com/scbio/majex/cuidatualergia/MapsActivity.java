@@ -36,7 +36,7 @@ public class MapsActivity extends FragmentActivity {
 
         CameraUpdate center=
                 CameraUpdateFactory.newLatLng(new LatLng(39.15293169992044, 0.2598180484771729));
-        CameraUpdate zoom= CameraUpdateFactory.zoomTo(15);
+        CameraUpdate zoom= CameraUpdateFactory.zoomTo(150);
 
         mMap.moveCamera(center);
         mMap.animateCamera(zoom);
