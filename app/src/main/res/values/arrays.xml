@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="tipoPolen">
+        <item>Casuarina</item>
+        <item>Cupressus</item>
+        <item>Fraxinus</item>
+        <item>Ligustrum</item>
+        <item>Morus</item>
+        <item>Olea</item>
+        <item>Pinus</item>
+        <item>Platanus</item>
+        <item>Populus</item>
+        <item>Quercus</item>
+        <item>Ulmus</item>
+
+    </string-array>
+
+
+</resources>

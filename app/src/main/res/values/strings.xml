@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">Cuida tu alergia</string>
+    <string name="Inicio">Localizacion</string>
+    <string name="Acerca">Saber más</string>
+    <string name="Consejos">Consejos</string>
+    <string name="Fin">Salir</string>
     <string name="TAG">Cuida_tu_alergia</string>
     <string name="title_activity_maps">Map</string>
     <string name="ERRORMSG">ERROR</string>
