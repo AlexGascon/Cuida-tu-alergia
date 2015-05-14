@@ -1,6 +1,11 @@
 package com.scbio.majex.cuidatualergia;
 
+import android.graphics.Color;
+
 import java.util.ArrayList;
+
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.PolygonOptions;
 
 /**
  * Created by Alex on 23/04/2015.
@@ -21,6 +26,8 @@ public class Geometria {
         this.latitud = latitud;
         this.longitud = longitud;
     }
+
+
 
     public String getDensidad() {
         return densidad;
@@ -45,4 +52,6 @@ public class Geometria {
     public void setLongitud(ArrayList<Double> longitud) {
         this.longitud = longitud;
     }
+
+
 }

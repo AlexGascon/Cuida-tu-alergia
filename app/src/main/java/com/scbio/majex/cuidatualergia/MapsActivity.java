@@ -1,5 +1,6 @@
 package com.scbio.majex.cuidatualergia;
 
+import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
@@ -9,17 +10,24 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polygon;
+import com.google.android.gms.maps.model.PolygonOptions;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
@@ -29,7 +37,7 @@ import java.util.ArrayList;
 
 public class MapsActivity extends FragmentActivity {
     //private final String TAG = getString(R.string.app_name);
-    private final String TAG = "CUIDATUALERGIA";
+    private final String TAG = "CUIDATUALERGIA_TAG";
     private final String ERRORMSG = "ERROR";//getString(R.string.ERRORMSG);
 
 
@@ -48,13 +56,13 @@ public class MapsActivity extends FragmentActivity {
         String bestProvider = locationManager.getBestProvider(criteria, true);
         Location myLocation = locationManager.getLastKnownLocation(bestProvider);
 
-        LatLng myLatLng = new LatLng(myLocation.getLatitude(), myLocation.getLongitude() );
+        /*LatLng myLatLng = new LatLng(myLocation.getLatitude(), myLocation.getLongitude() );
         CameraUpdate cameraMyLocation = CameraUpdateFactory.newLatLng(myLatLng);
         CameraUpdate zoom = CameraUpdateFactory.zoomTo(1000);
 
 
         mMap.moveCamera(cameraMyLocation);
-        mMap.animateCamera(zoom);
+        mMap.animateCamera(zoom);*/
 
         new HTTPTask("http://mapas.valencia.es/lanzadera/opendata/Polen-casuarina/JSON").execute();
     }
@@ -125,7 +133,7 @@ public class MapsActivity extends FragmentActivity {
         @Override
         //protected RESULTADOS doInBackground (PARAMETROS ... params)
         protected String doInBackground(Void ... params) {
-
+            Log.d("Entrar en HTTPTask", TAG);
             String JSONstring = "";
             try{
                 //Abrimos la conexión con la dirección web
@@ -174,8 +182,10 @@ public class MapsActivity extends FragmentActivity {
                 (Toast.makeText(getApplicationContext(), ERRORMSG, Toast.LENGTH_LONG)).show();
             //Éxito en la lectura
             else{
+                File file = new File(getApplicationContext().getFilesDir(), JSONString);
                 (Toast.makeText(getApplicationContext(), getString(R.string.JSON_read_success), Toast.LENGTH_LONG)).show();
                 new JSONparsingTask(JSONString).execute();
+                
             }
         }
 
@@ -187,7 +197,7 @@ public class MapsActivity extends FragmentActivity {
     }
 
     //public class [NOMBRE] extends AsyncTask <PARAMETROS, PROGRESO, RESULTADOS>
-    public class JSONparsingTask extends AsyncTask<Void, String, Void>{
+    public class JSONparsingTask extends AsyncTask<Void, String, ArrayList<Geometria>>{
 
         String JSONString;
         public JSONparsingTask(String jss) {
@@ -196,39 +206,92 @@ public class MapsActivity extends FragmentActivity {
         }
 
         @Override
-        protected Void doInBackground(Void... params) {
+        protected ArrayList<Geometria> doInBackground(Void... params){
+            ArrayList<Geometria> poligonos = new ArrayList<Geometria>();
+
             try {
                 publishProgress("JSONTask se ejecuta");
-                JSONObject jsObject = new JSONObject(this.JSONString);
-                JSONArray features = jsObject.getJSONArray("features");
-                JSONObject jsonEntry;
+                JSONObject jsObject = new JSONObject(this.JSONString), geometry;
+                JSONArray features = jsObject.getJSONArray("features"), coordinates;
 
-                ArrayList<Geometria> poligonos = new ArrayList<Geometria>();
-                Geometria poligonoTemp = new Geometria();
-                String densidadTemp;
 
-                publishProgress("Entramos al bucle, con features bien conseguido");
-                for(int i = 0; i < features.length(); i++){
-                    jsonEntry = features.getJSONObject(i);
-                    densidadTemp = ((JSONObject) jsonEntry.get("properties")).getString("densidad");
+               /*IMPORTANTÍSIMO: de momento, hemos puesto para dibujar sólo un polígono. Cuando esto
+                * funcione bien, ya lo cambiaremos como sea. Pero de momento, hay un 1
+                * donde debería haber un "features.length()"
+                *
+                *
+                * IMPORTANTE NO OLVIDARNOS DE CAMBIARLO
+                *  IMPORTANTE NO OLVIDARNOS DE CAMBIARLO
+                *   IMPORTANTE NO OLVIDARNOS DE CAMBIARLO
+                *    IMPORTANTE NO OLVIDARNOS DE CAMBIARLO
+                *     IMPORTANTE NO OLVIDARNOS DE CAMBIARLO
+                *      IMPORTANTE NO OLVIDARNOS DE CAMBIARLO
+                *       IMPORTANTE NO OLVIDARNOS DE CAMBIARLO
+                *        IMPORTANTE NO OLVIDARNOS DE CAMBIARLO
+                *
+                *  */
+                Log.d(TAG, "features length: " + features.length());
+                 for(int i = 0; i < features.length(); i++){
+                    JSONObject jsonEntry = features.getJSONObject(i);
+                    String densidadTemp = ((JSONObject) jsonEntry.get("properties")).getString("densidad");
+                    Geometria poligonoTemp = new Geometria();
                     poligonoTemp.setDensidad(densidadTemp);
 
-                    //publishProgress("Iteración " + i);
-                    /*
+                    //Obtenemos el vector con las coordenadas y lo casteamos a String
                     geometry = (JSONObject) jsonEntry.get("geometry");
                     coordinates = (JSONArray) geometry.get("coordinates");
-                    coordString = coordinates.toString();*/
+                    String coordString = coordinates.toString();
+                    //Log.d(TAG, "COORDSTRING: " + coordString);
+
+
+                    //Eliminamos los corchetes de principio y final de polígono
+                    coordString = coordString.substring(3, coordString.length() - 3);
+
+                    //Obtenemos cada par lat-lon de coordenadas
+                    String splitter = "],\\[";
+
+                    String[] parCoords = coordString.split(splitter);
+
+
+                    //Separamos latitud y longitud y las guardamos en diferentes arrays
+                    ArrayList<Double> latitudTemp = new ArrayList<Double>(), longitudTemp = new ArrayList<Double>();
+                    String LatLonSplitter = ",", LatLonTemp[];
+                    for(int j = 0; j < parCoords.length; j++){
+
+                        LatLonTemp = parCoords[j].split(LatLonSplitter);
+                        if(LatLonTemp[0].charAt(0) == '[') LatLonTemp[0] = LatLonTemp[0].substring(1);
+                        longitudTemp.add(Double.parseDouble(LatLonTemp[0]));
+                        latitudTemp.add(Double.parseDouble(LatLonTemp[1].substring(0,LatLonTemp[1].length()-1)));
+                    }
+
+                    //Las añadimos al polígono que dibujaremos
+                    poligonoTemp.setLatitud(latitudTemp);
+                    poligonoTemp.setLongitud(longitudTemp);
+
+
+                    if(i % 50 == 0 || i == 1){
+                        publishProgress("Iteración " + i);
+                    }
+
+
+                    /*
+                    DIBUJO DEL POLÍGONO. MIRAR BIEN CÓMO Y DÓNDE METERLO PARA QUE FUNCIONE
+
+                    */
+
+
+                poligonos.add(poligonoTemp);
 
                 }
                 Log.d(TAG, "Salimos!");
-                publishProgress("Salimos del bucle");
 
 
             }catch (Exception e){
 
-                Log.d(TAG, e.toString());
+                Log.e(TAG, e.toString());
             }
-            return null;
+            Log.d(TAG, "Llega a antes del return");
+            return poligonos;
         }
 
         @Override
@@ -237,8 +300,71 @@ public class MapsActivity extends FragmentActivity {
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
+        protected void onPostExecute(ArrayList<Geometria> poligonos) {
+            try{
+            super.onPostExecute(poligonos);
+            Log.d(TAG, "Llegamos a onPostExe");
+            Log.d(TAG, "Poligo-length: " + poligonos.size());
+            PolygonOptions[] polyOptArray = new PolygonOptions[poligonos.size()-1];
+            Polygon[] polygonArray = new Polygon[poligonos.size()-1];
+
+
+            for(int i = 0; i < poligonos.size(); i++){
+                Geometria polTemp =  poligonos.get(i);
+                polyOptArray[i] = new PolygonOptions();
+                ArrayList<Double> lat = polTemp.getLatitud();
+                ArrayList<Double> lon = polTemp.getLongitud();
+
+                Log.d(TAG, "Casi juega con PolyOpt");
+
+                polyOptArray[i].strokeColor(Color.BLACK);
+                polyOptArray[i].fillColor(Color.RED);
+                polyOptArray[i].strokeWidth(3);
+
+                Log.d(TAG, "Juega con PolyOpt");
+
+
+                Log.d(TAG, "Puntos (LAT) = " + lat.size() + " Puntos (LON) = " + lon.size());
+                for(int j = 0; j < lat.size(); j++){
+                    //if(j==0) Log.d(TAG, "Entra a añadir puntos");
+                    polyOptArray[i].add(new LatLng(lat.get(j), lon.get(j)));
+                    //Log.d(TAG, "Lat = " + lat.get(j) + " ----- Lon = " + lon.get(j));
+                    //if(j==0) Log.d(TAG, "Añade bien un punto");
+                }
+
+                //Log.d(TAG, "Añade bien TODOS los puntos");
+                polygonArray[i] = mMap.addPolygon(polyOptArray[i]);
+                polygonArray[i].setFillColor(Color.RED);
+                //Log.d(TAG, "Dibuja el polígono");
+
+
+
+                LatLng myPos = new LatLng(lat.get(0),lon.get(0));
+                CameraUpdate cameraMyLocation = CameraUpdateFactory.newLatLng(myPos);
+                CameraUpdate zoom = CameraUpdateFactory.zoomTo(500);
+                //Log.d(TAG, "Lat = " + lat.get(0) + " ----- Lon = " + lon.get(0));
+
+
+                mMap.moveCamera(cameraMyLocation);
+                mMap.animateCamera(zoom);
+                //Log.d(TAG, "Actualiza la posición");
+                /*mMap.addMarker(new MarkerOptions()
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+                        .position(myPos)
+                        .title("Tipo de polen: Casuarina")
+                        .snippet("Densidad: " + polTemp.getDensidad()));*/
+
+            Log.d(TAG, "Dibujado polígono " + i);
+
+            //lat.clear(); lon.clear(); //polTemp.clear();
+            Log.d(TAG, "Terminando de dibujar polígono " + i);
+            //lat.clear(); lon.clear();
+            }
+
+
+        }catch(Exception e){
+            Log.e(TAG, e.toString());
+        }
         }
 
         @Override
