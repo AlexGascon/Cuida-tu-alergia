@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Cuida-tu-alergia.iml" filepath="$PROJECT_DIR$/Cuida-tu-alergia.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Cuidatualergia.iml" filepath="$PROJECT_DIR$/Cuidatualergia.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

@@ -1,5 +1,7 @@
 package com.scbio.majex.cuidatualergia;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
@@ -64,7 +66,28 @@ public class MapsActivity extends FragmentActivity {
         mMap.moveCamera(cameraMyLocation);
         mMap.animateCamera(zoom);*/
 
-        new HTTPTask("http://mapas.valencia.es/lanzadera/opendata/Polen-casuarina/JSON").execute();
+        SharedPreferences shaPref = getSharedPreferences("preferencias", Context.MODE_PRIVATE);
+        int tipoPolen = shaPref.getInt("polen", 0);
+        String openDataURL;
+
+        switch(tipoPolen){
+            case 1: openDataURL = "http://mapas.valencia.es/lanzadera/opendata/Polen-cupressus/JSON"; break;
+            case 2: openDataURL = "http://mapas.valencia.es/lanzadera/opendata/Polen-fraxinus/JSON"; break;
+            case 3: openDataURL = "http://mapas.valencia.es/lanzadera/opendata/Polen-ligustrum/JSON"; break;
+            case 4: openDataURL = "http://mapas.valencia.es/lanzadera/opendata/Polen-morus/JSON"; break;
+            case 5: openDataURL = "http://mapas.valencia.es/lanzadera/opendata/Polen-olea/JSON"; break;
+            case 6: openDataURL = "http://mapas.valencia.es/lanzadera/opendata/Polen-pinus/JSON"; break;
+            case 7: openDataURL = "http://mapas.valencia.es/lanzadera/opendata/Polen-platanus/JSON"; break;
+            case 8: openDataURL = "http://mapas.valencia.es/lanzadera/opendata/Polen-populus/JSON"; break;
+            case 9: openDataURL = "http://mapas.valencia.es/lanzadera/opendata/Polen-quercus/JSON"; break;
+            case 10: openDataURL = "http://mapas.valencia.es/lanzadera/opendata/Polen-ulmus/JSON"; break;
+
+            //Consideraremos 0 como el caso por defecto.
+            default: openDataURL = "http://mapas.valencia.es/lanzadera/opendata/Polen-casuarina/JSON"; break;
+
+        }
+
+        new HTTPTask(openDataURL).execute();
     }
 
     @Override
@@ -215,21 +238,6 @@ public class MapsActivity extends FragmentActivity {
                 JSONArray features = jsObject.getJSONArray("features"), coordinates;
 
 
-               /*IMPORTANTÍSIMO: de momento, hemos puesto para dibujar sólo un polígono. Cuando esto
-                * funcione bien, ya lo cambiaremos como sea. Pero de momento, hay un 1
-                * donde debería haber un "features.length()"
-                *
-                *
-                * IMPORTANTE NO OLVIDARNOS DE CAMBIARLO
-                *  IMPORTANTE NO OLVIDARNOS DE CAMBIARLO
-                *   IMPORTANTE NO OLVIDARNOS DE CAMBIARLO
-                *    IMPORTANTE NO OLVIDARNOS DE CAMBIARLO
-                *     IMPORTANTE NO OLVIDARNOS DE CAMBIARLO
-                *      IMPORTANTE NO OLVIDARNOS DE CAMBIARLO
-                *       IMPORTANTE NO OLVIDARNOS DE CAMBIARLO
-                *        IMPORTANTE NO OLVIDARNOS DE CAMBIARLO
-                *
-                *  */
                 Log.d(TAG, "features length: " + features.length());
                  for(int i = 0; i < features.length(); i++){
                     JSONObject jsonEntry = features.getJSONObject(i);
@@ -270,7 +278,7 @@ public class MapsActivity extends FragmentActivity {
 
 
                     if(i % 50 == 0 || i == 1){
-                        publishProgress("Iteración " + i);
+                       Log.d(TAG, "Iteración " + i);
                     }
 
 
@@ -334,8 +342,26 @@ public class MapsActivity extends FragmentActivity {
 
                 //Log.d(TAG, "Añade bien TODOS los puntos");
                 polygonArray[i] = mMap.addPolygon(polyOptArray[i]);
-                polygonArray[i].setFillColor(Color.RED);
-                //Log.d(TAG, "Dibuja el polígono");
+
+
+                String dens = polTemp.getDensidad();
+
+                //setFillColor recibe 3 int que espera que deben estar en el rango [0, 255].
+                //No realiza ninguna comprobación, así que otros valores serán aceptados, pero darán algo indefinido
+                if(dens.equals("Muy Alta")) polygonArray[i].setFillColor(Color.rgb(130, 0, 130)); //Morado oscuro
+                else if(dens.equals("Alta")) polygonArray[i].setFillColor(Color.RED);
+                else if(dens.equals("Media")) polygonArray[i].setFillColor(Color.YELLOW);
+                /*En caso de que haya valores no determinados, lo pintará de verde también, dando tal vez
+                una falsa sensación de seguridad. Importante averiguar con certeza si existen otras
+                densidades posibles.*/
+                else polygonArray[i].setFillColor(Color.GREEN);
+
+
+
+
+
+
+
 
 
 
@@ -347,7 +373,7 @@ public class MapsActivity extends FragmentActivity {
 
                 mMap.moveCamera(cameraMyLocation);
                 mMap.animateCamera(zoom);
-                //Log.d(TAG, "Actualiza la posición");
+
                 /*mMap.addMarker(new MarkerOptions()
                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
                         .position(myPos)
