@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -17,7 +15,7 @@ import android.widget.Toast;
  */
 public class MainActivity extends Activity{
 
-    Button buttonLoc, buttonConsejos, buttonConfig, buttonSaber;
+    Button buttonLoc, buttonConsejos, buttonConfig, buttonSaber, buttonSalir, buttonEmergencia;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,6 +25,9 @@ public class MainActivity extends Activity{
         buttonSaber = (Button) findViewById(R.id.Boton2);
         buttonConsejos = (Button) findViewById(R.id.Boton3);
         buttonConfig = (Button) findViewById(R.id.Boton4);
+        buttonSalir = (Button) findViewById(R.id.Boton5);
+        buttonEmergencia = (Button) findViewById(R.id.Boton6);
+
 
 
 
@@ -65,8 +66,20 @@ public class MainActivity extends Activity{
             }
         });
 
-    }
+        buttonSalir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v){
+                lanzarSalir();
+            }
+        });
 
+        buttonEmergencia.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v){
+                llamadaEmergencia();
+            }
+        });
+    }
 
 
 

@@ -2,12 +2,36 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:gravity="center_vertical"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:background="#ffdfff7d">
+
+    <TextView android:id="@+id/TextView02"
+        style="@style/MiEstilo"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:background="#ffdfff7d"
+
+        android:text="Cuando los niveles de polen estén altos:"
+        android:textSize="25dp">
+    </TextView>
 
     <TextView android:id="@+id/TextView01"
         style="@style/MiEstilo"
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:text="Cuida y conoce tu alergia">
+        android:background="#ffdfff7d"
+
+        android:text="
+\t -    Permanezca bajo techo y mantenga las puertas y ventanas cerradas. Utilice el aire acondicionado si tiene uno.
+
+\t -    Deje las actividades al aire libre para el final de la tarde o después de una fuerte lluvia. Evite estar al aire libre entre las 5 y las 10 de la mañana.
+
+\t -    No seque la ropa al aire libre, ya que el polen se le pegará.
+
+\t -    Mantener las ventanillas del coche cerradas, colocar filtros antipolen en el aire acondicionado o llevar gafas de sol.
+
+\t -    Pídale a alguien que no tenga alergia que le pode el césped o use una mascarilla si usted debe hacerlo.">
     </TextView>
 
 </LinearLayout>

@@ -2,12 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#ffffe770"
+    android:focusable="false">
 
     <TextView android:id="@+id/TextView01"
         style="@style/MiEstilo"
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:text="Cuida y conoce tu alergia">
+        android:background="#ffffe770"
+        android:text="StringPolen">
     </TextView>
 
 </LinearLayout>

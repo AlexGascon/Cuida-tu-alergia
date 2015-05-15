@@ -11,11 +11,23 @@
         android:gravity="center"
         android:orientation="vertical"
         android:padding="30dip"
-        android:background="#4AD14F"
+        android:background="@drawable/amarillo"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:id="@+id/linearLayout">
+
+        <Button android:id="@+id/Boton6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Emergencia"
+            android:textColor="#fffaffff"
+            android:textStyle="bold"
+            android:background="#ffff020a"
+            android:paddingBottom="5dp"
+            android:shape="rectangle"
+            android:layout_marginBottom="10dp"
+            android:textSize="20dp"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -32,48 +44,67 @@
             android:typeface="serif" />
 
         <Button android:id="@+id/Boton1"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/Inicio"
-            android:textColor="#4AD14F"
+            android:textColor="#000000"
+            android:textStyle="bold"
             android:elegantTextHeight="true"
-            android:background="#ffffffff"
+            android:background="#ffb7ff43"
             android:shape="rectangle"
             android:longClickable="false"
             android:clickable="true"
-            android:layout_marginBottom="10dp" />
+            android:layout_marginBottom="10dp"
+            android:textSize="20dp" />
 
 
         <Button android:id="@+id/Boton2"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/Acerca"
-            android:textColor="#4AD14F"
-            android:background="#ffffffff"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            android:background="#ffb7ff43"
             android:paddingBottom="5dp"
             android:shape="rectangle"
-            android:layout_marginBottom="10dp" />
+            android:layout_marginBottom="10dp"
+            android:textSize="20dp"/>
 
 
         <Button android:id="@+id/Boton3"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/Consejos"
-            android:textColor="#4AD14F"
-            android:background="#ffffffff"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            android:background="#ffb7ff43"
             android:shape="rectangle"
-            android:layout_marginBottom="10dp" />
+            android:layout_marginBottom="10dp"
+            android:textSize="20dp"/>
 
         <Button android:id="@+id/Boton4"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/Preferencias"
-            android:textColor="#4AD14F"
-            android:background="#ffffffff"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            android:background="#ffb7ff43"
             android:paddingTop="5dp"
             android:shape="rectangle"
-            android:layout_marginBottom="10dp" />
+            android:layout_marginBottom="10dp"
+            android:textSize="20dp"/>
 
+        <Button android:id="@+id/Boton5"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/Fin"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            android:background="#ffb7ff43"
+            android:paddingTop="5dp"
+            android:shape="rectangle"
+            android:layout_marginBottom="10dp"
+            android:textSize="20dp"/>
 
 
     </LinearLayout>
