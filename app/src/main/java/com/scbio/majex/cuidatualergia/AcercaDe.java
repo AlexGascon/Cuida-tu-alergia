@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 public class AcercaDe extends Activity {
@@ -13,13 +14,16 @@ public class AcercaDe extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.acercade);
 
-        SharedPreferences prefs = getSharedPreferences("preferencias", Context.MODE_PRIVATE)
+        SharedPreferences prefs = getSharedPreferences("com.scbio.majex.cuidatualergia_preferences", Context.MODE_PRIVATE);
 
-        int tipoPolen = prefs.getInt("polen", 0);
+        String tipoPolenLeido = prefs.getString("polen", "0");
+        int tipoPolen = Integer.parseInt(tipoPolenLeido);
         String stringPolen;
 
+        Log.d("CUIDATUALERGIA_TAG", "" + tipoPolen);
+
          switch(tipoPolen) {
-             case 0:
+             default:
                  stringPolen = "Florece durante el otoño, fundamentalmente en los meses de octubre a diciembre. En la Península Ibérica está muy extendido su uso en las regiones del " +
                          "litoral mediterráneo y se cultiva como árbol de paseos, parques y jardines. Arbol de aspecto muy parecido a un pino.";
                  break;
@@ -65,13 +69,12 @@ public class AcercaDe extends Activity {
 
 
          }
-        TextView info = (TextView) findViewById(R.id.TextView01)
-        info.setText(stringPolen)
+        TextView info = (TextView) findViewById(R.id.TextView01);
+        info.setText(stringPolen);
 
 
 
     }
 
-}import android.app.Activity;
-import android.os.Bundle;
+}
 

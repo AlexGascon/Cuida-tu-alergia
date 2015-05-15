@@ -1,15 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="preferencias">
 
 
-
+<PreferenceCategory android:title="Tipos de polen">
     <ListPreference
         android:key="polen"
-        android:title="Tipo de polen "
-        android:summary="Selecciona el tipo de polen del que quiera obtenr información"
+        android:title="Tipo de polen"
+        android:summary="Selecciona el tipo de polen del que quiera obtener información"
         android:entries="@array/tipoPolen"
         android:entryValues="@array/tipoPolenValores"
         android:defaultValue="0"/>
+</PreferenceCategory>
 
+<PreferenceCategory android:title="Llamada de Emergencia">
+    <SwitchPreference
+        android:key="habilitarLlamada"
+        android:title="Permitir llamada de emergencia"
+        android:summary="Activar para que puedan realizarse llamadas de emergencia desde la aplicación"/>
+
+    <EditTextPreference
+        android:key="telfEmergencia"
+        android:title="Teléfono de emergencia"
+        android:summary="Teléfono al que se llamará cuando se pulse el botón de 'Emergencia'"
+        android:inputType="phone"
+        />
+
+
+</PreferenceCategory>
 
 </PreferenceScreen>

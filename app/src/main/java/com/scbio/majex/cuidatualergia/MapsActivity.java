@@ -66,8 +66,10 @@ public class MapsActivity extends FragmentActivity {
         mMap.moveCamera(cameraMyLocation);
         mMap.animateCamera(zoom);*/
 
-        SharedPreferences shaPref = getSharedPreferences("preferencias", Context.MODE_PRIVATE);
-        int tipoPolen = shaPref.getInt("polen", 0);
+        SharedPreferences prefs = getSharedPreferences("com.scbio.majex.cuidatualergia_preferences", Context.MODE_PRIVATE);
+
+        String tipoPolenLeido = prefs.getString("polen", "0");
+        int tipoPolen = Integer.parseInt(tipoPolenLeido);
         String openDataURL;
 
         switch(tipoPolen){

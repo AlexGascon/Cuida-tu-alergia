@@ -12,6 +12,7 @@
     -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
         android:allowBackup="true"
@@ -38,6 +39,24 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".Consejos"
+            android:label="@string/Consejos">
+        </activity>
+
+        <activity
+            android:name=".AcercaDe"
+            android:label="@string/Acerca">
+        </activity>
+
+        <activity
+            android:name=".Preferencias"
+            android:label="@string/Preferencias">
+        </activity>
+
+
+
 
 
         <uses-library android:name="com.google.android.maps" />
